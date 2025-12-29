@@ -1,5 +1,6 @@
 const Task = require("../models/task.model")
 const paginationHelpers = require("../../../helpers/pagination")
+const searchHelpers = require("../../../helpers/search")
 
 //[GET] /api/v1/tasks
 module.exports.index = async (req, res) => {
@@ -22,15 +23,23 @@ module.exports.index = async (req, res) => {
 
     //Phân trang
     const countRecords = await Task.countDocuments(find);
-    const limitNumber=req.query.limit;
+    const limitNumber = req.query.limit;
     let initPagination = {
         limit: 2,
         currentPage: 1
     }
 
-    if(limitNumber){
-        initPagination.limit=parseInt(limitNumber)
+    if (limitNumber) {
+        initPagination.limit = parseInt(limitNumber)
     }
+
+    //Tìm kiếm keyword
+    let objectSearch = searchHelpers(req.query);
+
+    if (objectSearch.regex) {
+        find.title = objectSearch.regex
+    }
+
     let pagination = paginationHelpers(initPagination, req.query, countRecords)
 
     const task = await Task.find(find).sort(sort).limit(pagination.limit).skip(pagination.skip);
