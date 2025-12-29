@@ -1,20 +1,42 @@
 const Task = require("../models/task.model")
+const paginationHelpers = require("../../../helpers/pagination")
 
 //[GET] /api/v1/tasks
 module.exports.index = async (req, res) => {
-    let find={
-        deleted:false
+    let find = {
+        deleted: false
     }
     //lay tren params
-    if(req.query.status){
-       find.status=req.query.status
+    if (req.query.status) {
+        find.status = req.query.status
     }
-    
-    const task = await Task.find(find);
-    console.log(task);
+
+    //lấy sort
+    const sortKey = req.query.sortKey;
+    const sortValue = req.query.sortValue;
+
+    let sort = {}
+    if (sortKey && sortValue) {
+        sort[sortKey] = sortValue // key linh động
+    }
+
+    //Phân trang
+    const countRecords = await Task.countDocuments(find);
+    const limitNumber=req.query.limit;
+    let initPagination = {
+        limit: 2,
+        currentPage: 1
+    }
+
+    if(limitNumber){
+        initPagination.limit=parseInt(limitNumber)
+    }
+    let pagination = paginationHelpers(initPagination, req.query, countRecords)
+
+    const task = await Task.find(find).sort(sort).limit(pagination.limit).skip(pagination.skip);
     //Khi truy cap url -> tra chuoi json
     res.json(task)
-} 
+}
 
 //[GET] /api/v1/detail/:id
 module.exports.detail = async (req, res) => {
@@ -27,6 +49,6 @@ module.exports.detail = async (req, res) => {
         });
         res.json(task)
     } catch (error) {
-       res.json("Không có dữ liệu")
+        res.json("Không có dữ liệu")
     }
 }
