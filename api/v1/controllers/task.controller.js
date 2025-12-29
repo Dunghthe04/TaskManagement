@@ -61,3 +61,34 @@ module.exports.detail = async (req, res) => {
         res.json("Không có dữ liệu")
     }
 }
+
+//[PATCH] /api/v1/change-status/:id
+module.exports.changeStatus = async (req, res) => {
+    try {
+        ///lay id muuon change
+        const id = req.params.id;
+
+        //lay ca body front end gui len
+        const body = req.body;
+        const statusNew = body.status;
+
+        await Task.updateOne({
+            _id: id,
+            status: statusNew
+        })
+        res.json({
+            code: 200,
+            message: "Cập nhập trạng thái thành công"
+        })
+
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Không tồn tại!"
+        })
+    }
+
+
+
+
+}
