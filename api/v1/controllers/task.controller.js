@@ -173,3 +173,29 @@ module.exports.createTask = async (req, res) => {
 
 }
 
+
+//[PATCH] /api/v1/task/update/:id
+module.exports.updateTask = async (req, res) => {
+    try {
+        //lay id can update
+        const id=req.params.id;
+
+        //lay body gui len
+        const body=req.body;
+
+        await Task.updateOne({_id: id},body)
+       
+        res.json({
+            code: 200,
+            message: "Cập nhập thành cồng"
+        })
+
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Cập nhập thất bại!"
+        })
+    }
+
+}
+
