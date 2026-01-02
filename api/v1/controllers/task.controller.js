@@ -118,6 +118,14 @@ module.exports.changeMulti = async (req, res) => {
                 })
                 break;
 
+            case "delete":
+                await Task.updateMany({_id: {$in: ids}},{deleted: value})    
+                res.json({
+                    code: 200,
+                    message: "Cập nhập trạng thái thành công"
+                })
+                break;
+
             default:
                 res.json({
                     code: 400,
@@ -125,17 +133,6 @@ module.exports.changeMulti = async (req, res) => {
                 })
                 break;
         }
-
-
-
-        await Task.updateOne({
-            _id: id,
-            status: statusNew
-        })
-        res.json({
-            code: 200,
-            message: "Cập nhập trạng thái thành công"
-        })
 
     } catch (error) {
         res.json({
