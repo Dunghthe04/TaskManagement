@@ -92,3 +92,59 @@ module.exports.changeStatus = async (req, res) => {
 
 
 }
+
+//[PATCH] /api/v1/change-multi
+module.exports.changeMulti = async (req, res) => {
+    try {
+
+        //lay cac id, status va value muon doi
+        const {
+            ids,
+            key,
+            value
+        } = req.body
+
+        //nếu key là status
+        switch (key) {
+            case "status":
+                //Cập nhập nhiều bản ghi
+                await Task.updateMany({
+                    _id: {$in : ids}},
+                    {status: value}
+                )
+                res.json({
+                    code: 200,
+                    message: "Cập nhập trạng thái thành công"
+                })
+                break;
+
+            default:
+                res.json({
+                    code: 400,
+                    message: "Không tồn tại!"
+                })
+                break;
+        }
+
+
+
+        await Task.updateOne({
+            _id: id,
+            status: statusNew
+        })
+        res.json({
+            code: 200,
+            message: "Cập nhập trạng thái thành công"
+        })
+
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Không tồn tại!"
+        })
+    }
+
+
+
+
+}
