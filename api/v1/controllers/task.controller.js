@@ -199,3 +199,26 @@ module.exports.updateTask = async (req, res) => {
 
 }
 
+//[PATCH] /api/v1/task/delete/:id
+module.exports.deleteTask = async (req, res) => {
+    try {
+        //lay id can update
+        const id=req.params.id;
+
+        await Task.deleteOne({_id: id})
+       
+        res.json({
+            code: 200,
+            message: "Xóa thành công thành cồng"
+        })
+
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Xóa thất bại!"
+        })
+    }
+
+}
+
+
