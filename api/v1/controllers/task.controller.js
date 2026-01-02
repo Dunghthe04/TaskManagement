@@ -148,3 +148,28 @@ module.exports.changeMulti = async (req, res) => {
 
 
 }
+
+//[POST] /api/v1/create
+module.exports.createTask = async (req, res) => {
+    try {
+        //lay body gui len
+        const body=req.body;
+
+        //tao 1 model
+        const newTask= new Task(body);
+        await newTask.save()
+       
+        res.json({
+            code: 200,
+            message: "Thêm mới thành cồng"
+        })
+
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Thêm mới thất bại!"
+        })
+    }
+
+}
+
