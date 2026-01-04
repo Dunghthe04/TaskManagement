@@ -4,6 +4,7 @@ const bodyParser=require("body-parser")
 const cors=require("cors")// chia sẻ nguồn tài nguyên chung
 require("dotenv").config();
 const database= require("./config/database")
+const cookieParser = require('cookie-parser')
 
 database.connect();
 
@@ -15,6 +16,10 @@ const port= process.env.PORT;
 
 //cors
 app.use(cors())
+
+//cookie parser
+app.use(cookieParser());
+
 
 //parse application/json
 app.use(bodyParser.json())
