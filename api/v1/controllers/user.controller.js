@@ -203,17 +203,17 @@ module.exports.resetPassword = async (req, res) => {
 
 module.exports.profileDetail = async (req, res) => {
     //lay newPassword
-    const token = req.cookies.token;
+    // const token = req.cookies.token;
 
-    //tra ve cac thong tin can thiet cho front end
-    const user = await User.findOne({
-        token: token
-    }).select("-password -token")
+    // //tra ve cac thong tin can thiet cho front end
+    // const user = await User.findOne({
+    //     token: token
+    // }).select("-password -token")
 
-
+    //lay user tu middleware luon
     res.json({
         code: 200,
         message: "Lay thong tin thanh cong",
-        info: user
+        info: req.user
     })
 }
