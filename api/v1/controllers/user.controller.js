@@ -2,6 +2,7 @@ const User = require('../models/user.model')
 const Forgotpassword = require('../models/forgotpassword')
 const randomOTP = require('../../../helpers/randomOTP')
 const sendEmailHelper = require('../../../helpers/sendEmailOTP')
+const randomToken=require('../../../helpers/randomToken');
 var md5 = require('md5');
 module.exports.register = async (req, res) => {
     //lấy body bên front end gửi lên
@@ -19,7 +20,12 @@ module.exports.register = async (req, res) => {
         })
     } else {
         body.password = md5(body.password);
-        const newUser = new User(body);
+        const newUser = new User({
+            fullname: body.fullname,
+            email: body.email,
+            password: body.password,
+            token: randomToken.randomToken(20)
+        });
         newUser.save();
 
         //lưu token vào cookie luôn
@@ -92,11 +98,12 @@ module.exports.forgotpassword = async (req, res) => {
     }
 
     //neu co -> gui OTP
+    const timeExpire=3;
     const OTP = randomOTP.randomOTP(8);
     const objectForgotPassword = {
         email: user.email,
         otp: OTP,
-        expireAt: Date.now()
+        expireAt: Date.now()+timeExpire*60*1000 // vif date.now la minisecond s
     }
 
     //luu vao database
@@ -215,5 +222,15 @@ module.exports.profileDetail = async (req, res) => {
         code: 200,
         message: "Lay thong tin thanh cong",
         info: req.user
+    })
+}
+
+
+module.exports.getAllUser = async (req, res) => {
+    const listUser=await User.find().select("-password -token")
+    res.json({
+        code: 200,
+        message: "Lay thong tin thanh cong",
+        listUser: listUser
     })
 }

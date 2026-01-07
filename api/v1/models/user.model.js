@@ -1,13 +1,9 @@
 const mongoose = require('mongoose')
-const randomToken=require('../../../helpers/randomToken');
 const UserSchema = mongoose.Schema({
     fullname: String,
     email: String,
     password: String,
-    token:{
-        type: String,
-        default: randomToken.randomToken(20)
-    } ,
+    token:String,
     deletedAt: Date
 },{timestamps: true})
 

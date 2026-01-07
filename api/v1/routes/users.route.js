@@ -8,5 +8,6 @@ router.get('/forgotpassword',controller.forgotpassword)
 router.get('/otpPassword',controller.otpPassword)
 router.get('/resetPassword',controller.resetPassword)
 router.get('/profileDetail',authenMiddleware.requireAuthen ,controller.profileDetail)
+router.get('/getAllUsers',authenMiddleware.requireAuthen ,controller.getAllUser)
 
 module.exports=router;
