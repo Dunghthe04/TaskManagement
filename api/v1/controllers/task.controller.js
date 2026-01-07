@@ -4,7 +4,13 @@ const searchHelpers = require("../../../helpers/search")
 
 //[GET] /api/v1/tasks
 module.exports.index = async (req, res) => {
+    //lấy ra task của account thôi ( task tạo or task join), 
     let find = {
+        // nam trong 1 or 2 la duoc
+        $or: [
+          {createBy: req.user.id},
+          {listUserJoin: req.user.id}
+        ],
         deleted: false
     }
     //lay tren params
