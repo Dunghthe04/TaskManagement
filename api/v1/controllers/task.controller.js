@@ -149,10 +149,13 @@ module.exports.changeMulti = async (req, res) => {
 //[POST] /api/v1/create
 module.exports.createTask = async (req, res) => {
     try {
+        //lay user thong qua middleware
+        const user=req.user;
         //lay body gui len
         const body=req.body;
 
         //tao 1 model
+        body.createBy=user.id;
         const newTask= new Task(body);
         await newTask.save()
        
